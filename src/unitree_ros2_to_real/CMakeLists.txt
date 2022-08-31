@@ -41,10 +41,15 @@ add_executable(ros2_position_example src/ros2_position_example.cpp)
 target_link_libraries(ros2_position_example ${EXTRA_LIBS})
 ament_target_dependencies(ros2_position_example rclcpp ros2_unitree_legged_msgs)
 
+add_executable(twist_to_high_cmd src/twist_to_high_cmd.cpp)
+target_link_libraries(twist_to_high_cmd ${EXTRA_LIBS})
+ament_target_dependencies(twist_to_high_cmd rclcpp ros2_unitree_legged_msgs)
+
 install(TARGETS
     ros2_udp
     ros2_walk_example
     ros2_position_example
+    twist_to_high_cmd
     DESTINATION lib/${PROJECT_NAME}
 )
 
