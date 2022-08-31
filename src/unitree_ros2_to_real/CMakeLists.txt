@@ -5,7 +5,7 @@ project(unitree_legged_real)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-
+find_package(geometry_msgs REQUIRED)
 find_package(ros2_unitree_legged_msgs REQUIRED)
 
 
@@ -43,7 +43,7 @@ ament_target_dependencies(ros2_position_example rclcpp ros2_unitree_legged_msgs)
 
 add_executable(twist_to_high_cmd src/twist_to_high_cmd.cpp)
 target_link_libraries(twist_to_high_cmd ${EXTRA_LIBS})
-ament_target_dependencies(twist_to_high_cmd rclcpp ros2_unitree_legged_msgs)
+ament_target_dependencies(twist_to_high_cmd rclcpp ros2_unitree_legged_msgs geometry_msgs)
 
 install(TARGETS
     ros2_udp
