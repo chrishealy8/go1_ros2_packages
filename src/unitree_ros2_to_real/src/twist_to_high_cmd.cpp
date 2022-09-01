@@ -27,8 +27,8 @@ class Converter : public rclcpp::Node
       high_cmd_msg.head[0] = 0xFE;
       high_cmd_msg.head[1] = 0xEF;
       high_cmd_msg.level_flag = UNITREE_LEGGED_SDK::HIGHLEVEL;
-      high_cmd_msg.mode = 0;
-      high_cmd_msg.gait_type = 0;
+      high_cmd_msg.mode = 2;
+      high_cmd_msg.gait_type = 1;
       high_cmd_msg.speed_level = 0;
       high_cmd_msg.foot_raise_height = 0;
       high_cmd_msg.body_height = 0;
@@ -50,14 +50,14 @@ class Converter : public rclcpp::Node
       high_cmd_msg.velocity[1] = msg->linear.y;
       high_cmd_msg.yaw_speed = msg->angular.z;
 
-      RCLCPP_INFO(this->get_logger(), "I heard: Linear ['%f', '%f', '%f'] and Angular ['%f', '%f', '%f']",
+      RCLCPP_INFO(this->get_logger(), "\nHearing: linear ['%.3f', '%.3f', '%.3f'] and angular ['%.3f', '%.3f', '%.3f']\n",
         msg->linear.x, msg->linear.y, msg->linear.z, msg->angular.x, msg->angular.y, msg->angular.z);
     }
 
     void timer_callback()
     {
-      RCLCPP_INFO(this->get_logger(), "I'm saying: velocity (x: %f, y: %f) and yaw speed: %f",
-        high_cmd_msg.velocity[0], high_cmd_msg.velocity[1], high_cmd_msg.yaw_speed);
+      RCLCPP_INFO(this->get_logger(), "\nPublishing: mode: %d, gait type: %d, velocity (x: %.3f, y: %.3f), yaw speed: %.3f\n",
+        high_cmd_msg.mode, high_cmd_msg.gait_type, high_cmd_msg.velocity[0], high_cmd_msg.velocity[1], high_cmd_msg.yaw_speed);
 
       publisher_->publish(high_cmd_msg);
     }
