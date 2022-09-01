@@ -16,6 +16,8 @@ class Converter : public rclcpp::Node
     Converter()
     : Node("twist_to_high_cmd")
     {
+      this->declare_parameter<int>("gait", 1);
+      
       subscription_ = this->create_subscription<geometry_msgs::msg::Twist>(
         "cmd_vel", 10, std::bind(&Converter::cmd_vel_callback, this, std::placeholders::_1));
 
@@ -28,7 +30,8 @@ class Converter : public rclcpp::Node
       high_cmd_msg.head[1] = 0xEF;
       high_cmd_msg.level_flag = UNITREE_LEGGED_SDK::HIGHLEVEL;
       high_cmd_msg.mode = 2;
-      high_cmd_msg.gait_type = 1;
+      // high_cmd_msg.gait_type = 1;
+      high_cmd_msg.gait_type = gait_;
       high_cmd_msg.speed_level = 0;
       high_cmd_msg.foot_raise_height = 0;
       high_cmd_msg.body_height = 0;
@@ -42,6 +45,7 @@ class Converter : public rclcpp::Node
     }
 
   private:
+    int gait_ = 1;
     ros2_unitree_legged_msgs::msg::HighCmd high_cmd_msg;
 
     void cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
@@ -56,6 +60,9 @@ class Converter : public rclcpp::Node
 
     void timer_callback()
     {
+      this->get_parameter("gait", gait_);
+      high_cmd_msg.gait_type = gait_;
+      
       RCLCPP_INFO(this->get_logger(), "\nPublishing: mode: %d, gait type: %d, velocity (x: %.3f, y: %.3f), yaw speed: %.3f\n",
         high_cmd_msg.mode, high_cmd_msg.gait_type, high_cmd_msg.velocity[0], high_cmd_msg.velocity[1], high_cmd_msg.yaw_speed);
 
